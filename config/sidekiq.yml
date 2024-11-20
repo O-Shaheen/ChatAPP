@@ -1,0 +1,8 @@
+chat_counter:
+  cron: "*/36 * * * *" # runs every 36 min
+  class: "ChatCountUpdateCron"
+
+messages_counter:
+   cron: "*/36 * * * *" # runs every 36 min
+   class: "MessageCountUpdateCron"
+    

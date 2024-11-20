@@ -1,0 +1,93 @@
+  [1m[35m (74.1ms)[0m  [1m[35mCREATE DATABASE `chat_app_development` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (8.3ms)[0m  [1m[35mCREATE DATABASE `chat_app_test` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (91.2ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[35m (26.3ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (3.6ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.0ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Create (69.4ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2024-11-19 18:57:24.307346', '2024-11-19 18:57:24.307348')[0m
+Migrating to Applications (20241118213700)
+  [1m[35m (93.4ms)[0m  [1m[35mCREATE TABLE `applications` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `token` varchar(255) NOT NULL, `name` varchar(255) NOT NULL, `chat_count` int DEFAULT 0, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_applications_on_token` (`token`))[0m
+  [1m[36mActiveRecord::SchemaMigration Create (67.9ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118213700')[0m
+Migrating to Chats (20241118213923)
+  [1m[35m (33.2ms)[0m  [1m[35mCREATE TABLE `chats` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `number` int NOT NULL, `name` varchar(255) NOT NULL, `application_id` bigint NOT NULL, `message_count` int DEFAULT 0, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_chats_on_application_id` (`application_id`), CONSTRAINT `fk_rails_3b5054ba3a`
+FOREIGN KEY (`application_id`)
+  REFERENCES `applications` (`id`)
+)[0m
+  [1m[35m (21.2ms)[0m  [1m[35mCREATE UNIQUE INDEX `index_chats_on_application_id_and_number` ON `chats` (`application_id`, `number`)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (5.1ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118213923')[0m
+Migrating to Messages (20241118214028)
+  [1m[35m (33.2ms)[0m  [1m[35mCREATE TABLE `messages` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `number` int NOT NULL, `body` text NOT NULL, `chat_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_messages_on_chat_id` (`chat_id`), CONSTRAINT `fk_rails_0f670de7ba`
+FOREIGN KEY (`chat_id`)
+  REFERENCES `chats` (`id`)
+)[0m
+  [1m[35m (20.2ms)[0m  [1m[35mCREATE UNIQUE INDEX `index_messages_on_chat_id_and_number` ON `messages` (`chat_id`, `number`)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (4.4ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118214028')[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (4.9ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+Migrating to FixingIndexesChatsAndMessages (20241119192854)
+  [1m[36mActiveRecord::SchemaMigration Create (5.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241119192854')[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[35m (222.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS `chat_app_development`[0m
+  [1m[35m (9.0ms)[0m  [1m[35mDROP DATABASE IF EXISTS `chat_app_test`[0m
+  [1m[35m (72.0ms)[0m  [1m[35mCREATE DATABASE `chat_app_development` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (8.2ms)[0m  [1m[35mCREATE DATABASE `chat_app_test` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (31.0ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[35m (27.8ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT GET_LOCK('8617640504667222525', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Create (4.9ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2024-11-19 19:33:03.717006', '2024-11-19 19:33:03.717008')[0m
+Migrating to Applications (20241118213700)
+  [1m[35m (34.6ms)[0m  [1m[35mCREATE TABLE `applications` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `token` varchar(255) NOT NULL, `name` varchar(255) NOT NULL, `chat_count` int DEFAULT 0, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_applications_on_token` (`token`))[0m
+  [1m[36mActiveRecord::SchemaMigration Create (5.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118213700')[0m
+Migrating to Chats (20241118213923)
+  [1m[35m (34.9ms)[0m  [1m[35mCREATE TABLE `chats` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `number` int NOT NULL, `name` varchar(255) NOT NULL, `application_id` bigint NOT NULL, `message_count` int DEFAULT 0, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_chats_on_application_id` (`application_id`), CONSTRAINT `fk_rails_3b5054ba3a`
+FOREIGN KEY (`application_id`)
+  REFERENCES `applications` (`id`)
+)[0m
+  [1m[35m (84.6ms)[0m  [1m[35mCREATE UNIQUE INDEX `index_chats_on_application_id_and_number` ON `chats` (`application_id`, `number`)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (7.6ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118213923')[0m
+Migrating to Messages (20241118214028)
+  [1m[35m (33.4ms)[0m  [1m[35mCREATE TABLE `messages` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `number` int NOT NULL, `body` text NOT NULL, `chat_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_messages_on_chat_id` (`chat_id`), CONSTRAINT `fk_rails_0f670de7ba`
+FOREIGN KEY (`chat_id`)
+  REFERENCES `chats` (`id`)
+)[0m
+  [1m[35m (18.6ms)[0m  [1m[35mCREATE UNIQUE INDEX `index_messages_on_chat_id_and_number` ON `messages` (`chat_id`, `number`)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (6.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241118214028')[0m
+Migrating to FixingIndexesChatsAndMessages (20241119192854)
+  [1m[35m (78.7ms)[0m  [1m[35mDROP INDEX `index_chats_on_application_id` ON `chats`[0m
+  [1m[35m (15.7ms)[0m  [1m[35mDROP INDEX `index_messages_on_chat_id` ON `messages`[0m
+  [1m[36mActiveRecord::SchemaMigration Create (6.9ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20241119192854')[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT RELEASE_LOCK('8617640504667222525')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
